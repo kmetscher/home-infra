@@ -1,0 +1,22 @@
+- name: Update package lists and install fail2ban
+  ansible.builtin.apt:
+    become: true
+    name: fail2ban
+    state: present
+    update_cache: yes
+
+- name: Install jail.local file
+  ansible.builtin.copy:
+    become: true
+    src: jail.local
+    dest: /etc/fail2ban/jail.local
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Restart fail2ban
+  ansible.builtin.service:
+    become: true
+    name: fail2ban
+    state: restarted
+    enabled: yes

@@ -1,0 +1,5 @@
+- hosts: ingress
+  roles:
+    - common
+    - ingress
+

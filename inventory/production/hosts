@@ -1,0 +1,16 @@
+raspis:
+  hosts:
+    danbilzerian.goonstack.lan
+    bakedalaska.goonstack.lan
+elitedesks:
+  hosts:
+    jamescharles.goonstack.lan
+    kennethpinyan.goonstack.lan
+laptops:
+  hosts:
+    mazu.goonstack.lan
+    thomasmahoney.goonstack.lan
+
+ingress:
+  hosts:
+    jamescharles.goonstack.lan
