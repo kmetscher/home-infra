@@ -1,0 +1,24 @@
+- name: Update package lists and install haproxy
+  become: true
+  ansible.builtin.apt:
+    name: haproxy
+    state: present
+    update_cache: yes
+
+- name: Write haproxy config file
+  become: true
+  ansible.builtin.template:
+    src: haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg
+    owner: haproxy
+    group: haproxy
+    mode: '0644'
+    validate: /usr/sbin/haproxy -f %s -c
+    backup: yes
+
+- name: Restart haproxy service
+  become: true
+  ansible.builtin.service:
+    name: haproxy
+    state: restarted
+    enabled: yes
