@@ -1,24 +1,51 @@
-- name: Update package lists and install haproxy
+- name: Update package lists and install socat
   become: true
   ansible.builtin.apt:
-    name: haproxy
+    name: socat
     state: present
     update_cache: yes
 
-- name: Write haproxy config file
+- name: Create the acme user group
   become: true
-  ansible.builtin.template:
-    src: haproxy.cfg
-    dest: /etc/haproxy/haproxy.cfg
-    owner: haproxy
-    group: haproxy
-    mode: '0644'
-    validate: /usr/sbin/haproxy -f %s -c
-    backup: yes
+  ansible.builtin.group:
+    name: acme
+    state: present
 
-- name: Restart haproxy service
+- name: Create a system user for the ACME client
   become: true
-  ansible.builtin.service:
-    name: haproxy
-    state: restarted
-    enabled: yes
+  ansible.builtin.user:
+    state: present
+    name: acme
+    groups: acme,haproxy
+    home: /var/lib/acme
+    system: true
+
+- name: Fetch acme shell script from Github repo
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/acmesh-official/acme.sh/refs/heads/master/acme.sh
+    dest: /tmp/acme.sh
+    mode: '0744'
+    
+- name: Run the acme script install step
+  become: true
+  ansible.builtin.command: 
+    chdir: /tmp
+    argv: 
+      - /tmp/acme.sh 
+      - --install 
+      - --no-cron 
+      - --no-profile 
+      - --home 
+      - /usr/local/share/acme.sh
+
+- name: Symlink acme script to path
+  become: true
+  ansible.builtin.file:
+    src: /usr/local/share/acme.sh/acme.sh
+    dest: /usr/local/bin/acme
+    mode: '0755'
+    state: link
+
+- name: Test using LE staging server
+  become: true
+  ansible.builtin.shell: acme --register-account --server letsencrypt_test -m kscott.mets@gmail.com > /tmp/account.out
