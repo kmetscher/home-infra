@@ -1,0 +1,5 @@
+- hosts:
+  - kubernetes-workers
+  roles: 
+    - kubernetes-common
+    - kubernetes-worker

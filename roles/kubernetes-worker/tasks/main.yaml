@@ -1,0 +1,14 @@
+- name: Install worker node dependencies
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - conntrack
+      - kmod
+      - ipset
+      - socat
+
+- name: Install containerd
+  ansible.builtin.apt:
+    name: containerd
+    state: present
+

@@ -1,15 +1,26 @@
-raspis:
-  hosts:
-    danbilzerian:
-      ansible_host: 192.168.0.69
-elitedesks:
+kubernetes-workers:
   hosts:
     jamescharles:
-      ansible_host: 192.168.0.88
-    kennethpinyan:
-      ansible_host: 192.168.0.93
+      ansible_host: jamescharles.lan
+      ansible_become: true
+    lucaswerner:
+      ansible_host: lucaswerner.lan
+      ansible_become: true
 
-ingress:
+kubernetes-servers:
+  hosts:
+    kennethpinyan:
+      ansible_host: kennethpinyan.lan
+      ansible_become: true
+
+media-servers:
   hosts:
     jamescharles:
-      ansible_host: 192.168.0.88
+      ansible_host: jamescharles.lan
+      ansible_become: true
+
+dns-servers:
+  hosts:
+    jamescharles:
+      ansible_host: jamescharles.lan
+      ansible_become: true
