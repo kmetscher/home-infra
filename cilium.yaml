@@ -1,0 +1,4 @@
+- hosts:
+  - kubernetes-servers
+  roles:
+    - cilium

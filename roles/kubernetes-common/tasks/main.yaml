@@ -40,3 +40,12 @@
     state: restarted
     enabled: true
 
+- name: Add helm repo
+  ansible.builtin.deb822_repository:
+    name: helm
+    types: deb
+    uris: https://packages.buildkite.com/helm-linux/helm-debian/any/
+    suites: "any"
+    components: "main"
+    architectures: amd64
+    signed_by: https://packages.buildkite.com/helm-linux/helm-debian/gpgkey

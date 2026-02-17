@@ -1,0 +1,19 @@
+- name: Get the current cilium stable version number
+  ansible.builtin.uri:
+    url: "https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt"
+    return_content: true
+  register: cilium_stable_version
+
+- name: Download cilium stable binary from github releases
+  ansible.builtin.get_url:
+    backup: true
+    checksum: "sha256:https://github.com/cilium/cilium-cli/releases/download/{{ cilium_stable_version.content | replace('\n', '') }}/cilium-linux-amd64.tar.gz.sha256sum"
+    dest: /tmp/cilium.tar.gz
+    decompress: false
+    url: "https://github.com/cilium/cilium-cli/releases/download/{{ cilium_stable_version.content | replace('\n', '') }}/cilium-linux-amd64.tar.gz"
+
+- name: Extract cilium tarball to path
+  ansible.builtin.unarchive:
+    src: /tmp/cilium.tar.gz
+    dest: /usr/local/bin/
+    remote_src: true
